@@ -1,0 +1,29 @@
+            <div id="modalcontents">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h3 id="modalheader">
+                {% if wrongid %}
+                  News not found
+                {% else %}
+                  {{ news.heading }}
+                {% endif %}
+                </h3>
+              </div>
+              <div class="modal-body" id="modalbody">
+                {% if wrongid %}
+                  Invalid news id
+                {% else %}
+                  {{ news.body }}
+                {% endif %}
+              </div>
+              <div class="modal-footer">
+                <a href="#" class="btn" data-dismiss="modal">Close</a>
+                {% if logged_in %}
+                    {% if already_added %}
+                        <a href="#" class="btn btn-danger" data-dismiss="modal" onclick="unpinFromProfile({{ news.id }});loadNews();"><i class="icon-tasks icon-white"></i> Unpin from Newsboard</a>
+                    {% else %}
+                        <a href="#" class="btn btn-primary" data-dismiss="modal" onclick="pinToProfile({{ news.id }});"><i class="icon-tasks icon-white"></i> Pin to Newsboard</a>
+                    {% endif %}
+                {% endif %}
+              </div>
+            </div>

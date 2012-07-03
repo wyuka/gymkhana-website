@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block contentsarea %}
+<div class="hero-unit">
+            <h1>Students' Gymkhana</h1>
+            <h3>National Institute of Technology, Durgapur</h3>
+            <p>A web portal for student activities, information dispersal and complaint redressal.</p>
+          </div>
+{% endblock %}
+
+{% block additional_scripts %}
+<script language="javascript">
+    $(document).ready(function(){
+        $("#about").addClass("active");
+    });
+</script>
+{% endblock %}

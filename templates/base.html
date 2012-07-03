@@ -1,0 +1,50 @@
+{% extends "base_generic.html" %}
+{% block mainbody %}
+<div class="row-fluid">
+        <div class="span2">
+          <div class="well sidebar-nav">
+            <ul class="nav nav-list">
+              <li class="nav-header">Clubs</li>
+              <li class="active"><a href="#">Students' Gymkhana</a></li>
+              <li><a href="#">MNTC</a></li>
+              <li><a href="#">CCA</a></li>
+              <li><a href="#">GLUG</a></li>
+              <li><a href="#">Literary Circle</a></li>
+              <li><a href="#">SAE</a></li>
+              <li><a href="#">IEEE</a></li>
+              <li><a href="#">ISTE</a></li>
+              <li><a href="#">Chayanika</a></li>
+              <li class="nav-header">Halls of Residence</li>
+              <li><a href="#">Hall 1</a></li>
+              <li><a href="#">Hall 2</a></li>
+              <li><a href="#">Hall 3</a></li>
+              <li><a href="#">Hall 4</a></li>
+              <li><a href="#">Hall 5</a></li>
+              <li><a href="#">Hall 6</a></li>
+              <li><a href="#">Hall 7</a></li>
+              <li><a href="#">Hall 8</a></li>
+              <li><a href="#">Hall 9</a></li>
+              <li><a href="#">Hall 10</a></li>
+              <li><a href="#">Hall 11</a></li>
+            </ul>
+          </div><!--/.well -->
+        </div><!--/span-->
+        <div class="span10">
+        {% block alertarea %}
+            {% if loginerr %}
+                <div class="alert alert-error">
+                <button class="close" data-dismiss="alert">×</button>
+                <strong>Login Error!</strong> Please check username or password.
+                </div>
+            {% endif %}
+            {% if logoutsuccess %}
+                <div class="alert alert-success">
+                <button class="close" data-dismiss="alert">×</button>
+                <strong>Logged Out!</strong> You have been successfully logged out.
+                </div>
+            {% endif %}
+        {% endblock %}
+        {% block contentsarea %}{% endblock %}
+        </div><!--/span-->
+      </div><!--/row-->
+{% endblock %}

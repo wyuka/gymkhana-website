@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% block contentsarea %}
+          <div class="hero-unit">
+            <div class="row-fluid">
+                <div class="span9">
+                    <h1>Students' Gymkhana</h1>
+                    <h2><small>National Institute of Technology, Durgapur</small></h2><br>
+                    <p>A web portal for student activities, information dispersal and complaint redressal.</p>
+                </div><!--.span9-->
+            </div><!--.row-fluid-->
+          </div>
+          <div id="newspager" class="row-fluid">
+            <div class="btn-toolbar">
+              <div class="btn-group">
+                <a class="btn" id = "firsrpage" onclick="pageNumber=1;loadNews();"><i class="icon-globe"></i> Most Recent</a>
+                <a class="btn dropdown-toggle" data-toggle="dropdown">
+                  <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                  <!-- dropdown menu links -->
+                  <li><a href="#" onclick="setNewsOrder('mostrecent');"><i class="icon-globe"></i> Most Recent</a></li>
+                  <li><a href="#" onclick="setNewsOrder('mostviewed');"><i class="icon-star"></i> Most Viewed</a></li>
+                  <li><a href="#" onclick="setNewsOrder('newsboard');"><i class="icon-tasks"></i> Newsboard</a></li>
+                </ul>
+              </div>
+              <div class="btn-group">
+                <a class="btn" id = "prevnews" onclick="getPrevPage();"><i class="icon-chevron-left"></i> Newer</a>
+                <a class="btn" id = "nextnews" onclick="getNextPage();"><i class="icon-chevron-right"></i> Older</a>
+              </div>
+            </div>
+            <hr>
+          </div><!--#newspager-->
+          <!--hr-->
+          <div>
+            <div class="modal hide fade" id="newsmodal">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h3 id="modalheader">Loading news...</h3>
+              </div>
+              <div class="modal-body" id="modalbody">
+                <p>
+                <div class="progress progress-striped active">
+                <div class="bar" style="width: 100%;"></div>
+                </div>
+                </p>
+              </div>
+              <div class="modal-footer">
+                <a href="#" class="btn" data-dismiss="modal">Close</a>
+              </div>
+            </div>
+            <div id="newsblock"></div>
+          </div>
+{% endblock %}
+
+{% block additional_scripts %}
+    <script language="javascript">
+    oldestPageMostRecent = 1;
+    oldestPageMostViewed = 1;
+    oldestPageNewsBoard = 0;
+    pageNumber = 1;
+    newsOrder = 'mostrecent';
+
+    function validatePrevNext() {
+            if (pageNumber == 1) {
+                $("#prevnews").addClass("disabled");
+            }
+            else {
+                $("#prevnews").removeClass("disabled");
+            }
+            if (newsOrder == 'mostrecent') {
+                if (pageNumber == oldestPageMostRecent) {
+                    $("#nextnews").addClass("disabled");
+                }
+                else {
+                    $("#nextnews").removeClass("disabled");
+                }
+            }
+            else if (newsOrder == 'mostviewed') {
+                if (pageNumber == oldestPageMostViewed) {
+                    $("#nextnews").addClass("disabled");
+                }
+                else {
+                    $("#nextnews").removeClass("disabled");
+                }
+            }
+            else if (newsOrder == 'newsboard') {
+                if (oldestPageNewsBoard == 0) {
+                    $("#nextnews").addClass("disabled");
+                    $("#prevnews").addClass("disabled");
+                    return;
+                }
+                if (pageNumber == oldestPageNewsBoard) {
+                    $("#nextnews").addClass("disabled");
+                }
+                else {
+                    $("#nextnews").removeClass("disabled");
+                }
+            }
+        }
+        function loadNews() {
+            $("#newsblock").load("/newspage", "page=" + pageNumber + "&newsorder=" + newsOrder);
+            validatePrevNext();
+        }
+        function setNewsOrder(type) {
+            newsOrder = type;
+            if (newsOrder == 'mostrecent') {
+                $("#firsrpage").html("<i class=\"icon-globe\"></i> Most Recent");
+            }
+            else if (newsOrder == 'mostviewed') {
+                $("#firsrpage").html("<i class=\"icon-star\"></i> Most Viewed");
+            }
+            else if (newsOrder == 'newsboard') {
+                $("#firsrpage").html("<i class=\"icon-tasks\"></i> Newsboard");
+            }
+            pageNumber = 1;
+            loadNews();
+        }
+        function getPrevPage() {
+            if (pageNumber == 1)
+                return;
+            pageNumber = pageNumber - 1;
+            loadNews(pageNumber);
+        }
+        function getNextPage() {
+            if (newsOrder == 'mostrecent') {
+                if (pageNumber == oldestPageMostRecent)
+                    return;
+            }
+            else if (newsOrder == 'mostviewed') {
+                if (pageNumber == oldestPageMostViewed)
+                    return;
+            }
+            else if (newsOrder == 'newsboard') {
+                if (oldestPageNewsBoard == 0)
+                    return;
+                if (pageNumber == oldestPageNewsBoard)
+                    return;
+            }
+            pageNumber = pageNumber + 1;
+            loadNews(pageNumber);
+        }
+        function showNews(id) {
+            $('#newsmodal').modal();
+            $('#newsmodal').load('/newsmodal','newsid=' + id);
+        }
+        function pinToProfile(id) {
+            $.get('/pintoprofile', 'newsid=' + id);
+        }
+        function unpinFromProfile(id) {
+            $.get('/unpinfromprofile', 'newsid=' + id);
+        }
+        $(document).ready(function(){
+            $("#home").addClass("active");
+            newsOrder = 'mostrecent';
+            pageNumber = 1;
+            oldestPageMostRecent = {{ oldest_page_mostrecent }};
+            oldestPageMostViewed = {{ oldest_page_mostviewed }};
+            oldestPageNewsBoard = {{ oldest_page_newsboard }};
+            loadNews();
+        });
+    </script>
+{% endblock %}
